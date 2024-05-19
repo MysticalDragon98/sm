@@ -7,8 +7,10 @@
     "@coretools/inspector": "^1.0.2",
     "chalk": "4",
     "dotenv": "^16.3.1",
+    "handlebars": "^4.7.8",
     "minimist": "^1.2.8",
-    "termx": "^1.2.5"
+    "termx": "^1.2.5",
+    "toml": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",
