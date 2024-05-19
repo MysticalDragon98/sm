@@ -1,7 +1,14 @@
 {
-  "name": "ts-node",
+  "name": "@coretools/sm",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:MysticalDragon98/sm.git"
+  },
+  "bin": {
+    "sm": "dist/index.js"
+  },
   "license": "MIT",
   "dependencies": {
     "@coretools/inspector": "^1.0.2",

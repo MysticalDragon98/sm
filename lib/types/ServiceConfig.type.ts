@@ -1,8 +1,12 @@
 export type ServiceConfig = {
     name: string;
     cwd: string;
-    repo?: string;
     description?: string;
+
+    git: {
+        repo?: string;
+        branch?: string;
+    }
 
     service: {
         autostart?: boolean;
@@ -10,14 +14,19 @@ export type ServiceConfig = {
         user?: string;
     };
 
-    network?: {
+    network: {
         port?: number;
         domain?: string;
     };
 
-    githooks?: {
-        enable?: boolean;
+    githooks: {
+        branch?: string;
     };
 
-    commands?: Record<string, string>;
+    ssl: {
+        fullchain?: string;
+        privkey?: string;
+    }
+
+    commands: Record<string, string>;
 }
