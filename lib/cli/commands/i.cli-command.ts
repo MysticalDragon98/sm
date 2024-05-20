@@ -13,6 +13,7 @@ import existsFile from "../../modules/fs/existsFile";
 import Paths from "../../const/Paths.const";
 import createLink from "../../modules/fs/createLink";
 import deleteFile from "../../modules/fs/deleteFile";
+import ensureDir from "../../modules/fs/ensureDir";
 
 interface IOptions {
 
@@ -100,6 +101,7 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
             printMessage(StyleOK(), `Deleted githooks link: ${links.githooks}`);
         }
 
+        await ensureDir(join(Paths.githooks, serviceName));
         await createLink(targets.githooks, links.githooks);
         printMessage(StyleOK(), `Created githooks link: ${links.githooks}`);
     } catch (error) {
