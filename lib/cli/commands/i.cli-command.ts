@@ -9,6 +9,10 @@ import { writeFile } from "fs/promises";
 import getServiceOutputFolder from "../../modules/config/getServiceOutputFolder";
 import { join } from "path";
 import ensureServiceOutputFolder from "../../modules/config/ensureServiceOutputFolder";
+import existsFile from "../../modules/fs/existsFile";
+import Paths from "../../const/Paths.const";
+import createLink from "../../modules/fs/createLink";
+import deleteFile from "../../modules/fs/deleteFile";
 
 interface IOptions {
 
@@ -31,6 +35,12 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
         githooks: join(serviceOutputFolder, `${serviceName}.${config.git.branch ?? "master"}.sh`),
     };
 
+    const links = {
+        service: join(Paths.systemd, `${serviceName}.service`),
+        nginx: join(Paths.nginx, `${serviceName}.conf`),
+        githooks: join(Paths.githooks, `${serviceName}/${config.git.branch ?? "master"}.sh`),
+    };
+    
     try {
         await writeFile(targets.service, serviceFile);
         printMessage(StyleOK(), `Generated service file: ${targets.service}`);
@@ -52,6 +62,48 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
         printMessage(StyleOK(), `Generated githooks file: ${targets.githooks}`);
     } catch (error) {
         printMessage(StyleError(), `Failed to generate githooks file ${targets.githooks}: ${error}`);
+        return;
+    }
+
+    try {
+        if (await existsFile(links.service)) { 
+            await deleteFile(links.service);
+
+            printMessage(StyleOK(), `Deleted service link: ${links.service}`);
+        }
+
+        await createLink(targets.service, links.service);
+        printMessage(StyleOK(), `Created service link: ${links.service}`);
+    } catch (error) {
+        printMessage(StyleError(), `Failed to create service link ${links.service}: ${error}`);
+        return;
+    }
+
+    try {
+        if (await existsFile(links.nginx)) { 
+            await deleteFile(links.nginx);
+
+            printMessage(StyleOK(), `Deleted nginx link: ${links.nginx}`);
+        }
+
+        await createLink(targets.nginx, links.nginx);
+        printMessage(StyleOK(), `Created nginx link: ${links.nginx}`);
+    } catch (error) {
+        printMessage(StyleError(), `Failed to create nginx link ${links.nginx}: ${error}`);
+        return;
+    }
+
+    try {
+        if (await existsFile(links.githooks)) { 
+            await deleteFile(links.githooks);
+
+            printMessage(StyleOK(), `Deleted githooks link: ${links.githooks}`);
+        }
+
+        await createLink(targets.githooks, links.githooks);
+        printMessage(StyleOK(), `Created githooks link: ${links.githooks}`);
+    } catch (error) {
+        printMessage(StyleError(), `Failed to create githooks link ${links.githooks}: ${error}`);
         return;
     }
 }
