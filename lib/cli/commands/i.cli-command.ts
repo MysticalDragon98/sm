@@ -34,13 +34,13 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
     const targets = {
         service: join(serviceOutputFolder, `${serviceName}.service`),
         nginx: join(serviceOutputFolder, `${serviceName}.conf`),
-        githooks: join(serviceOutputFolder, `${serviceName}.${config.git.branch ?? "master"}.sh`),
+        githooks: join(serviceOutputFolder, `${serviceName}.${config.git.branch ?? "master"}.toml`),
     };
 
     const links = {
         service: join(Paths.systemd, `${serviceName}.service`),
         nginx: join(Paths.nginx, `${serviceName}.conf`),
-        githooks: join(Paths.githooks, `${serviceName}/${config.git.branch ?? "master"}.sh`),
+        githooks: join(Paths.githooks, `${serviceName}/${config.git.branch ?? "master"}.toml`),
     };
     
     try {

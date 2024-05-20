@@ -24,13 +24,13 @@ export default async function rREPLCommand ([ serviceFile ]: string[], options: 
     const targets = {
         service: join(serviceOutputFolder, `${serviceName}.service`),
         nginx: join(serviceOutputFolder, `${serviceName}.conf`),
-        githooks: join(serviceOutputFolder, `${serviceName}.${config.git.branch ?? "master"}.sh`),
+        githooks: join(serviceOutputFolder, `${serviceName}.${config.git.branch ?? "master"}.toml`),
     };
 
     const links = {
         service: join(Paths.systemd, `${serviceName}.service`),
         nginx: join(Paths.nginx, `${serviceName}.conf`),
-        githooks: join(Paths.githooks, `${serviceName}/${config.git.branch ?? "master"}.sh`),
+        githooks: join(Paths.githooks, `${serviceName}/${config.git.branch ?? "master"}.toml`),
     };
 
     await deleteFile(targets.service);
