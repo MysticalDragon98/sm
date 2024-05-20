@@ -6,13 +6,17 @@ import Paths from "../../const/Paths.const";
 import deleteFile from "../../modules/fs/deleteFile";
 import printMessage from "../../../plugins/cli/lib/modules/stdout/printMessage";
 import StyleOK from "../../styles/OK.style";
+import parseServiceFile from "../../modules/fs/parseServiceFile";
 
 interface IOptions {
     
 }
 
-export default async function rREPLCommand ([ serviceName ]: string[], options: IOptions) {
-    ok(serviceName, "Usage: sm r <service name>"); 
+export default async function rREPLCommand ([ serviceFile ]: string[], options: IOptions) {
+    ok(serviceFile, "Usage: sm r <service-file>"); 
+    
+    const config = await parseServiceFile(serviceFile);
+    const serviceName = config.name;
     const serviceOutputFolder = await getServiceOutputFolder(serviceName);
 
     await ensureServiceOutputFolder(serviceName);
