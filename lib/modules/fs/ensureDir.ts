@@ -1,5 +1,5 @@
-import { exec } from "child_process";
+import executeShCommand from "../sh/executeShCommand";
 
 export default async function ensureDir (path: string) {
-    await exec(`mkdir -p "${path}"`);
+    await executeShCommand(`mkdir -p "${path}"`);
 }

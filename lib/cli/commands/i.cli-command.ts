@@ -14,7 +14,7 @@ import Paths from "../../const/Paths.const";
 import createLink from "../../modules/fs/createLink";
 import deleteFile from "../../modules/fs/deleteFile";
 import ensureDir from "../../modules/fs/ensureDir";
-import { exec } from "child_process";
+import executeShCommand from "../../modules/sh/executeShCommand";
 
 interface IOptions {
 
@@ -110,15 +110,15 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
         return;
     }
 
-    await exec(`sudo systemctl daemon-reload`);
+    await executeShCommand(`sudo systemctl daemon-reload`);
     printMessage(StyleOK(), `Reloaded systemd daemon`);
 
-    await exec(`sudo systemctl enable ${serviceName}`);
+    await executeShCommand(`sudo systemctl enable ${serviceName}`);
     printMessage(StyleOK(), `Enabled service: ${serviceName}`);
 
-    await exec(`sudo systemctl start ${serviceName}`);
+    await executeShCommand(`sudo systemctl start ${serviceName}`);
     printMessage(StyleOK(), `Started service: ${serviceName}`);
 
-    await exec(`sudo systemctl restart nginx`);
+    await executeShCommand(`sudo systemctl restart nginx`);
     printMessage(StyleOK(), `Restarted nginx`);
 }

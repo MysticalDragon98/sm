@@ -1,5 +1,5 @@
-import { exec } from "child_process";
+import executeShCommand from "../sh/executeShCommand";
 
 export default async function deleteFile (path: string) {
-    return await exec(`rm -rf "${path}"`);
+    return await executeShCommand(`rm -rf "${path}"`);
 }
