@@ -1,6 +1,6 @@
 {
   "name": "@coretools/sm",
-  "version": "1.0.0-q",
+  "version": "1.0.0-r",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
