@@ -9,7 +9,7 @@ export default async function generateNginxFile (config: ServiceConfig) {
             location: {
                 proxy_pass: `http://127.0.0.1:${config.network.port}`
             },
-            listen: "80",
+            listen: "443",
             ssl_certificate: config.ssl.fullchain ?? `/etc/letsencrypt/live/${config.network.domain}/fullchain.pem`,
             ssl_certificate_key: config.ssl.privkey ?? `/etc/letsencrypt/live/${config.network.domain}/privkey.pem`,
             include: `/etc/letsencrypt/options-ssl-nginx.conf`,
