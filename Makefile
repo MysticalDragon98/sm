@@ -12,5 +12,5 @@ update: clean
 	make
 
 postinstall:
-	mkdir -p /etc/sm.d 
+	mkdir -p /etc/sm.d/services
 	cp templates/conf.toml /etc/sm.d/conf.toml
