@@ -1,7 +1,4 @@
-import printData from "../../../plugins/cli/lib/modules/stdout/printData";
-import printJSON from "../../../plugins/cli/lib/modules/stdout/printJSON";
 import printMessage from "../../../plugins/cli/lib/modules/stdout/printMessage";
-import ensureDir from "../../modules/fs/ensureDir";
 import parseServiceFile from "../../modules/fs/parseServiceFile";
 import generateGithooksFile from "../../modules/generators/generateGithooksFile";
 import generateNginxFile from "../../modules/generators/generateNginxFile";
@@ -9,6 +6,8 @@ import generateSystemServiceFile from "../../modules/generators/generateSystemSe
 import StyleOK from "../../styles/OK.style";
 import StyleError from "../../styles/Error.style";
 import { writeFile } from "fs/promises";
+import getServiceOutputFolder from "../../modules/config/getServiceOutputFolder";
+import { join } from "path";
 
 interface IOptions {
 
@@ -21,10 +20,12 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
     const githooksFile = await generateGithooksFile(config);
     const serviceName = config.name;
 
+    const serviceOutputFolder = await getServiceOutputFolder(serviceName);
+
     const targets = {
-        service: `/etc/systemd/system/${serviceName}.service`,
-        nginx: `/etc/nginx/sites-available/${serviceName}.conf`,
-        githooks: `/etc/githooks.d/services/${serviceName}/${config.git.branch ?? "master"}.sh`,
+        service: join(serviceOutputFolder, `${serviceName}.service`),
+        nginx: join(serviceOutputFolder, `${serviceName}.conf`),
+        githooks: join(serviceOutputFolder, `${serviceName}.${config.git.branch ?? "master"}.sh`),
     };
 
     try {

@@ -1,6 +1,6 @@
 {
   "name": "@coretools/sm",
-  "version": "1.0.0",
+  "version": "1.0.0-a",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "ts-node index.ts",
+    "postinstall": "make postinstall",
     "build": "tsc"
   }
 }
