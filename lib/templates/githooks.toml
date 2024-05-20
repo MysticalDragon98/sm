@@ -1,4 +1,4 @@
 dir = "{{dir}}"
 
-[branch.{{branch}}]
+[branches.{{branch}}]
 cmd = "{{cmd}}"
