@@ -14,6 +14,7 @@ import Paths from "../../const/Paths.const";
 import createLink from "../../modules/fs/createLink";
 import deleteFile from "../../modules/fs/deleteFile";
 import ensureDir from "../../modules/fs/ensureDir";
+import { exec } from "child_process";
 
 interface IOptions {
 
@@ -108,4 +109,16 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
         printMessage(StyleError(), `Failed to create githooks link ${links.githooks}: ${error}`);
         return;
     }
+
+    await exec(`sudo systemctl daemon-reload`);
+    printMessage(StyleOK(), `Reloaded systemd daemon`);
+
+    await exec(`sudo systemctl enable ${serviceName}`);
+    printMessage(StyleOK(), `Enabled service: ${serviceName}`);
+
+    await exec(`sudo systemctl start ${serviceName}`);
+    printMessage(StyleOK(), `Started service: ${serviceName}`);
+
+    await exec(`sudo systemctl restart nginx`);
+    printMessage(StyleOK(), `Restarted nginx`);
 }
