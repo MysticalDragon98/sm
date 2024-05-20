@@ -5,7 +5,6 @@ StartLimitIntervalSec={{Unit.StartLimitIntervalSec}}
 
 [Service]
 Type={{Service.Type}}
-Environment="{{Service.Environment}}"
 Restart={{Service.Restart}}
 RestartSec={{Service.RestartSec}}
 User={{Service.User}}
