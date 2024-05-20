@@ -1,5 +1,5 @@
-import { symlink } from "fs/promises";
+import { exec } from "child_process";
 
 export default async function createLink (source: string, target: string) {
-    return await symlink(target, source);
+    return await exec(`ln -s "${source}" "${target}"`);
 }
