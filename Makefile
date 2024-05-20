@@ -12,5 +12,4 @@ update: clean
 	make
 
 postinstall:
-	mkdir -p /etc/sm.d/services
-	cp templates/conf.toml /etc/sm.d/conf.toml
+	sudo mkdir -p /etc/sm.d/services

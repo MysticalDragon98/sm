@@ -8,6 +8,7 @@ import StyleError from "../../styles/Error.style";
 import { writeFile } from "fs/promises";
 import getServiceOutputFolder from "../../modules/config/getServiceOutputFolder";
 import { join } from "path";
+import ensureServiceOutputFolder from "../../modules/config/ensureServiceOutputFolder";
 
 interface IOptions {
 
@@ -21,6 +22,8 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
     const serviceName = config.name;
 
     const serviceOutputFolder = await getServiceOutputFolder(serviceName);
+
+    await ensureServiceOutputFolder(serviceName);
 
     const targets = {
         service: join(serviceOutputFolder, `${serviceName}.service`),
