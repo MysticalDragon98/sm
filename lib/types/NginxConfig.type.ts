@@ -9,5 +9,9 @@ export type NginxConfig = {
         ssl_certificate: string;
         ssl_certificate_key: string;
         include: string;
+        mappings: {
+            endpoint: string;
+            proxy_pass: string;
+        }[];
     }
 }

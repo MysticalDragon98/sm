@@ -17,6 +17,8 @@ export type ServiceConfig = {
     network: {
         port?: number;
         domain?: string;
+
+        mappings?: Record<string, string>;
     };
 
     githooks: {
