@@ -3,7 +3,6 @@ import { ServiceConfig } from "../../types/ServiceConfig.type";
 import parseHandlebarsTemplate from "../templates/parseHandlebarsTemplate";
 
 export default async function generateNginxFile (config: ServiceConfig) {
-    
     return await parseHandlebarsTemplate("nginx.conf", <NginxConfig> {
         server: {
             server_name: config.network.domain,
