@@ -12,6 +12,7 @@ export type ServiceConfig = {
         autostart?: boolean;
         autorestart?: boolean;
         user?: string;
+        enabled?: boolean;
     };
 
     network: {
@@ -21,8 +22,13 @@ export type ServiceConfig = {
         mappings?: Record<string, string>;
     };
 
+    nginx?: {
+        enabled?: boolean;
+    };
+
     githooks: {
         branch?: string;
+        enabled?: boolean;
     };
 
     ssl: {

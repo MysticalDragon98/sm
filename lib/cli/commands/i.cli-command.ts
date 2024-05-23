@@ -42,82 +42,99 @@ export default async function cREPLCommand ([ inputFile ]: string[], options: IO
         nginx: join(Paths.nginx, `${serviceName}.conf`),
         githooks: join(Paths.githooks, `${serviceName}.toml`),
     };
+
+    if (config.service?.enabled !== false) {
+        try {
+            await writeFile(targets.service, serviceFile);
+            printMessage(StyleOK(), `Generated service file: ${targets.service}`);
+        } catch (error) {
+            printMessage(StyleError(), `Failed to generate service file ${targets.service}: ${error}`);
+            return;
+        }
+    }
+
     
-    try {
-        await writeFile(targets.service, serviceFile);
-        printMessage(StyleOK(), `Generated service file: ${targets.service}`);
-    } catch (error) {
-        printMessage(StyleError(), `Failed to generate service file ${targets.service}: ${error}`);
-        return;
-    }
-
-    try {
-        await writeFile(targets.nginx, nginxFile);
-        printMessage(StyleOK(), `Generated nginx file: ${targets.nginx}`);
-    } catch (error) {
-        printMessage(StyleError(), `Failed to generate nginx file ${targets.nginx}: ${error}`);
-        return;
-    }
-
-    try {
-        await writeFile(targets.githooks, githooksFile);
-        printMessage(StyleOK(), `Generated githooks file: ${targets.githooks}`);
-    } catch (error) {
-        printMessage(StyleError(), `Failed to generate githooks file ${targets.githooks}: ${error}`);
-        return;
-    }
-
-    try {
-        if (await existsFile(links.service)) { 
-            await deleteFile(links.service);
-
-            printMessage(StyleOK(), `Deleted service link: ${links.service}`);
+    if (config.nginx?.enabled !== false) {
+        try {
+            await writeFile(targets.nginx, nginxFile);
+            printMessage(StyleOK(), `Generated nginx file: ${targets.nginx}`);
+        } catch (error) {
+            printMessage(StyleError(), `Failed to generate nginx file ${targets.nginx}: ${error}`);
+            return;
         }
-
-        await createLink(targets.service, links.service);
-        printMessage(StyleOK(), `Created service link: ${links.service}`);
-    } catch (error) {
-        printMessage(StyleError(), `Failed to create service link ${links.service}: ${error}`);
-        return;
     }
 
-    try {
-        if (await existsFile(links.nginx)) { 
-            await deleteFile(links.nginx);
-
-            printMessage(StyleOK(), `Deleted nginx link: ${links.nginx}`);
+    if (config.githooks?.enabled !== false) {
+        try {
+            await writeFile(targets.githooks, githooksFile);
+            printMessage(StyleOK(), `Generated githooks file: ${targets.githooks}`);
+        } catch (error) {
+            printMessage(StyleError(), `Failed to generate githooks file ${targets.githooks}: ${error}`);
+            return;
         }
-
-        await createLink(targets.nginx, links.nginx);
-        printMessage(StyleOK(), `Created nginx link: ${links.nginx}`);
-    } catch (error) {
-        printMessage(StyleError(), `Failed to create nginx link ${links.nginx}: ${error}`);
-        return;
     }
 
-    try {
-        if (await existsFile(links.githooks)) { 
-            await deleteFile(links.githooks);
+    if (config.service?.enabled !== false) {
+        try {
+            if (await existsFile(links.service)) { 
+                await deleteFile(links.service);
 
-            printMessage(StyleOK(), `Deleted githooks link: ${links.githooks}`);
+                printMessage(StyleOK(), `Deleted service link: ${links.service}`);
+            }
+
+            await createLink(targets.service, links.service);
+            printMessage(StyleOK(), `Created service link: ${links.service}`);
+        } catch (error) {
+            printMessage(StyleError(), `Failed to create service link ${links.service}: ${error}`);
+            return;
         }
-
-        await createLink(targets.githooks, links.githooks);
-        printMessage(StyleOK(), `Created githooks link: ${links.githooks}`);
-    } catch (error) {
-        printMessage(StyleError(), `Failed to create githooks link ${links.githooks}: ${error}`);
-        return;
     }
 
-    await executeShCommand(`sudo systemctl daemon-reload`);
-    printMessage(StyleOK(), `Reloaded systemd daemon`);
+    if (config.nginx?.enabled !== false) {
+        try {
+            if (await existsFile(links.nginx)) { 
+                await deleteFile(links.nginx);
 
-    await executeShCommand(`sudo systemctl enable ${serviceName}`);
-    printMessage(StyleOK(), `Enabled service: ${serviceName}`);
+                printMessage(StyleOK(), `Deleted nginx link: ${links.nginx}`);
+            }
 
-    await executeShCommand(`sudo systemctl start ${serviceName}`);
-    printMessage(StyleOK(), `Started service: ${serviceName}`);
+            await createLink(targets.nginx, links.nginx);
+            printMessage(StyleOK(), `Created nginx link: ${links.nginx}`);
+        } catch (error) {
+            printMessage(StyleError(), `Failed to create nginx link ${links.nginx}: ${error}`);
+            return;
+        }
+    }
 
-    await executeShCommand(`sudo systemctl restart nginx`);
-    printMessage(StyleOK(), `Restarted nginx`);
+    if (config.githooks?.enabled !== false) {
+        try {
+            if (await existsFile(links.githooks)) { 
+                await deleteFile(links.githooks);
+
+                printMessage(StyleOK(), `Deleted githooks link: ${links.githooks}`);
+            }
+
+            await createLink(targets.githooks, links.githooks);
+            printMessage(StyleOK(), `Created githooks link: ${links.githooks}`);
+        } catch (error) {
+            printMessage(StyleError(), `Failed to create githooks link ${links.githooks}: ${error}`);
+            return;
+        }
+    }
+
+    if (config.service?.enabled !== false) {
+        await executeShCommand(`sudo systemctl daemon-reload`);
+        printMessage(StyleOK(), `Reloaded systemd daemon`);
+
+        await executeShCommand(`sudo systemctl enable ${serviceName}`);
+        printMessage(StyleOK(), `Enabled service: ${serviceName}`);
+
+        await executeShCommand(`sudo systemctl start ${serviceName}`);
+        printMessage(StyleOK(), `Started service: ${serviceName}`);
+    }
+
+    if (config.nginx?.enabled !== false) {
+        await executeShCommand(`sudo systemctl restart nginx`);
+        printMessage(StyleOK(), `Restarted nginx`);
+    }
 }
